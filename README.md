@@ -6,3 +6,5 @@ Dado que el protocolo de Bitcoin facilita la conexión a la red de nodos, cualqu
 
 
 ## Messages
+
+El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar los nodos es el mensaje de versión. Este mensaje proporciona información sobre el nodo transmisor al nodo receptor al inicio de una conexión. Hasta que los nodos no intercambien y verifiquen estos mensajes de versión, no se aceptarán otros tipos de mensajes.
