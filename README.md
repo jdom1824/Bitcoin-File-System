@@ -4,3 +4,5 @@ El protocolo de Bitcoin permite la conexión entre computadoras que ejecutan el 
 
 Dado que el protocolo de Bitcoin facilita la conexión a la red de nodos, cualquiera puede escribir su propio programa para conectarse a la red. Solo es necesario conocer el lenguaje de comunicación de los nodos.
 
+
+## Messages
