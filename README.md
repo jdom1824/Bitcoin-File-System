@@ -11,10 +11,12 @@ El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar l
 
 
 ## Header 
-El encabezado contiene un resumen del mensaje que se va a enviar y es el mismo para todos los mensajes
+
+El encabezado incluye un resumen del mensaje que se va a enviar y es uniforme para todos los mensajes.
+
+- Magic bytes: Este es un conjunto único de bytes utilizado para identificar el inicio de un nuevo mensaje. Siempre es el mismo para todos los nodos. Dado que el flujo de bits en la conexión TCP es continuo, es útil poder identificar cuándo comienza un nuevo mensaje. Este conjunto de bytes, que parece aleatorio, ha sido seleccionado específicamente para que sea improbable que aparezca en otra parte del mensaje.
 
 ### Message Header Structure:
-
 
 | Name        | Example Data | Format        | Size | Bytes                               |
 |-------------|--------------|---------------|------|-------------------------------------|
@@ -22,6 +24,9 @@ El encabezado contiene un resumen del mensaje que se va a enviar y es el mismo p
 | Command     | "version"    | ascii bytes   | 12   | 76 65 72 73 69 6F 6E 00 00 00 00 00 |
 | Size        | 85           | little-endian | 4    | 55 00 00 00                         |
 | Checksum    |              | bytes         | 4    | F7 63 9C 60                         |
+
+
+## Message Version
 
 
 ### Payload (version message):
