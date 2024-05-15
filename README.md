@@ -9,9 +9,12 @@ Dado que el protocolo de Bitcoin facilita la conexión a la red de nodos, cualqu
 
 El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar los nodos es el mensaje de versión. Este mensaje proporciona información sobre el nodo transmisor al nodo receptor al inicio de una conexión. Hasta que los nodos no intercambien y verifiquen estos mensajes de versión, no se aceptarán otros tipos de mensajes.
 
-### Header
 
-# Message Header Structure:
+## Header 
+El encabezado contiene un resumen del mensaje que se va a enviar y es el mismo para todos los mensajes
+
+### Message Header Structure:
+
 
 | Name        | Example Data | Format        | Size | Bytes                               |
 |-------------|--------------|---------------|------|-------------------------------------|
@@ -21,10 +24,7 @@ El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar l
 | Checksum    |              | bytes         | 4    | F7 63 9C 60                         |
 
 
-
-
-
-# Payload (version message):
+### Payload (version message):
 
 | Name               | Example Data | Format                   | Size   | Example Bytes                                  |
 |--------------------|--------------|--------------------------|--------|------------------------------------------------|
