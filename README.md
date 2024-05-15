@@ -70,6 +70,7 @@ El handshake es el proceso que establece comunicacion entre dos nodos de Bitcoin
 
 En el protocolo de Bitcoin el hanshake trabaja de la siguiente manera: 
 
+![Handshake](https://github.com/jdom1824/Bitcoin-File-System/blob/main/images/Handshake.jpg)
 
 
 
