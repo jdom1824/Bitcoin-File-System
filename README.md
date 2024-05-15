@@ -64,3 +64,19 @@ El mensaje de versión es uno de los más completos que se puede enviar en Bitco
 | User Agent         | ""           | compact size, ascii      | compact| 00                                             |
 | Last Block         | 0            | little-endian            | 4      | 00 00 00 00                                    |
 
+## Handshake
+
+El handshake es el proceso que establece comunicacion entre dos nodos de Bitcoin. Antes de empezar a recibir data, necesitamos realizar un handshake con otro nodo. Esto es solo una secuencia de mensajes. 
+
+En el protocolo de Bitcoin el hanshake trabaja de la siguiente manera: 
+
+
+
+
+
+
+
+
+
+
+
