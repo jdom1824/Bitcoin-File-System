@@ -15,6 +15,7 @@ El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar l
 El encabezado incluye un resumen del mensaje que se va a enviar y es uniforme para todos los mensajes.
 
 - Magic bytes: Este es un conjunto único de bytes utilizado para identificar el inicio de un nuevo mensaje. Siempre es el mismo para todos los nodos. Dado que el flujo de bits en la conexión TCP es continuo, es útil poder identificar cuándo comienza un nuevo mensaje. Este conjunto de bytes, que parece aleatorio, ha sido seleccionado específicamente para que sea improbable que aparezca en otra parte del mensaje.
+- Command: Indica el tipo de mensaje que se envía. En el protocolo Bitcoin, se pueden enviar diferentes tipos de mensajes, cada uno conteniendo distintos tipos de información. Este campo de 12 bytes contiene la codificación ASCII del nombre del mensaje. Por ejemplo, "version".
 
 ### Message Header Structure:
 
