@@ -72,7 +72,10 @@ En el protocolo de Bitcoin el hanshake trabaja de la siguiente manera:
 
 ![Handshake](https://github.com/jdom1824/Bitcoin-File-System/blob/main/images/Handshake.jpg)
 
+Basicamente el handshake esta compuesto de 2 pasos. 
 
+1. La comunicación se inicia enviando el mensaje de versión, y el nodo con el que nos conectamos envía su propio mensaje de versión.
+2. Luego, el nodo envía el mensaje verack ("verification acknowledge") confirmando la recepción de nuestra versión, y nosotros finalizamos enviando nuestro propio verack confirmando la recepción del mensaje de versión del nodo.
 
 
 
