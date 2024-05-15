@@ -80,7 +80,7 @@ Basicamente el handshake esta compuesto de 2 pasos.
 
 ## Verack
 
-El mensaje verack es un simple mensaje de encabezado sin carga útil.
+El mensaje verack es un simple mensaje de encabezado sin carga útil. Puede encontrar el codigo aqui: [verack_message.py](https://github.com/jdom1824/Bitcoin-File-System/blob/main/verack_message.py)
 
 # Verack Message Structure:
 
