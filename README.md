@@ -36,6 +36,16 @@ El mensaje de versión es uno de los más completos que se puede enviar en Bitco
 
 - Protocol version: Este campo indica la versión del protocolo que está en uso y define los comandos que el protocolo puede entender. Diferentes versiones soportan diferentes tipos de mensajes, por lo que, conociendo la versión del protocolo, podemos determinar qué tipos de mensajes se pueden manejar.
 - Services: Este campo es una lista opcional de servicios que tu nodo puede ofrecer. Es un campo de 32 bits, donde cada bit en 1 indica que el nodo puede proporcionar diferentes servicios. Por ejemplo, tener el primer bit en 1 indica que eres un nodo completo y puedes ofrecer todos los bloques de la blockchain. Dejar este campo en 0 indica que el nodo está en modo de prueba.
+- Time: Es el tiempo en formato Unix
+- Remote services: Esta es una lista opcional de servicios que crees que están disponibles en el nodo remoto al que te vas a conectar. Es similar a la estructura principal de servicios.
+- Remote IP: Esta es la dirección IP del nodo al que te vas a conectar o piensas que puedes conectarte. Esta dirección está en formato IPv6.
+- Remote Port: Este es el puerto al que nos debemos conectar, por defecto 8333.
+- Local Services: Esta es una lista de servicios que puede ofrecer tu nodo.
+- Local IP: Esta es la dirección IP de tu nodo a nivel local.
+- Local Port: Este es el puerto del nodo a nivel local, generalmente es el mismo 8333.
+- Nonce: Es un número generado aleatoriamente que puede usarse para detectar conexiones a ti mismo más tarde. Se puede dejar en 0.
+- User Agent: Es una cadena de texto que puede identificarte en la red. Por ejemplo, /Satoshi:22-0-0/, pero también puedes poner "Nodo escalable versión 1".
+- Last Block: La altura del bloque en tu blockchain local. Puedes dejarlo en 0 si no tienes ningún bloque descargado.
 
 ### Payload (version message):
 
