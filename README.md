@@ -11,9 +11,19 @@ El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar l
 
 ### Header
 
+# Message Header Structure:
+
+| Name        | Example Data | Format        | Size | Bytes                               |
+|-------------|--------------|---------------|------|-------------------------------------|
+| Magic Bytes |              | bytes         | 4    | F9 BE B4 D9                         |
+| Command     | "version"    | ascii bytes   | 12   | 76 65 72 73 69 6F 6E 00 00 00 00 00 |
+| Size        | 85           | little-endian | 4    | 55 00 00 00                         |
+| Checksum    |              | bytes         | 4    | F7 63 9C 60                         |
 
 
-´´´
+
+
+
 # Payload (version message):
 
 | Name               | Example Data | Format                   | Size   | Example Bytes                                  |
@@ -30,5 +40,4 @@ El protocolo de Bitcoin establece que el primer mensaje que deben intercambiar l
 | Nonce              | 0            | little-endian            | 8      | 00 00 00 00 00 00 00 00                        |
 | User Agent         | ""           | compact size, ascii      | compact| 00                                             |
 | Last Block         | 0            | little-endian            | 4      | 00 00 00 00                                    |
-´´´
 
