@@ -80,3 +80,5 @@ En el protocolo de Bitcoin el hanshake trabaja de la siguiente manera:
 
 
 
+
+

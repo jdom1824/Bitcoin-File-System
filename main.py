@@ -32,7 +32,7 @@ def main():
 
     try:
         while True:
-            response = sock.recv(2048)  # Tamaño del buffer ajustable según necesidades
+            response = receive_message()  # Tamaño del buffer ajustable según necesidades
             if not response:
                 print("No more data received. Connection may be closed.")
                 break
