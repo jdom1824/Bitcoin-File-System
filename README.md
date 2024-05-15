@@ -33,6 +33,10 @@ El encabezado incluye un resumen del mensaje que se va a enviar y es uniforme pa
 
 El mensaje de versión es uno de los más completos que se puede enviar en Bitcoin, ya que contiene mucha información. Sin embargo, es un buen punto de partida, porque si puedes construir un mensaje de versión, podrás construir cualquier mensaje dentro del protocolo de Bitcoin. El código en Python lo encuentras aquí: [version_message.py](https://github.com/jdom1824/Bitcoin-File-System/blob/main/version_message.py)
 
+
+- Protocol version: Este campo indica la versión del protocolo que está en uso y define los comandos que el protocolo puede entender. Diferentes versiones soportan diferentes tipos de mensajes, por lo que, conociendo la versión del protocolo, podemos determinar qué tipos de mensajes se pueden manejar.
+- Services: Este campo es una lista opcional de servicios que tu nodo puede ofrecer. Es un campo de 32 bits, donde cada bit en 1 indica que el nodo puede proporcionar diferentes servicios. Por ejemplo, tener el primer bit en 1 indica que eres un nodo completo y puedes ofrecer todos los bloques de la blockchain. Dejar este campo en 0 indica que el nodo está en modo de prueba.
+
 ### Payload (version message):
 
 | Name               | Example Data | Format                   | Size   | Example Bytes                                  |
