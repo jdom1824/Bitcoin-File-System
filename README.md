@@ -31,7 +31,7 @@ El encabezado incluye un resumen del mensaje que se va a enviar y es uniforme pa
 
 ## Message Version
 
-El mensaje de versión es uno de los más completos que se puede enviar en Bitcoin, ya que contiene mucha información. Sin embargo, es un buen punto de partida, porque si puedes construir un mensaje de versión, podrás construir cualquier mensaje dentro del protocolo de Bitcoin. El código en Python lo encuentras aquí: [link](https://github.com/jdom1824/Bitcoin-File-System/blob/main/version_message.py)
+El mensaje de versión es uno de los más completos que se puede enviar en Bitcoin, ya que contiene mucha información. Sin embargo, es un buen punto de partida, porque si puedes construir un mensaje de versión, podrás construir cualquier mensaje dentro del protocolo de Bitcoin. El código en Python lo encuentras aquí: [version_message.py](https://github.com/jdom1824/Bitcoin-File-System/blob/main/version_message.py)
 
 ### Payload (version message):
 
