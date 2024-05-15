@@ -78,6 +78,22 @@ Basicamente el handshake esta compuesto de 2 pasos.
 2. Luego, el nodo envía el mensaje verack ("verification acknowledge") confirmando la recepción de nuestra versión, y nosotros finalizamos enviando nuestro propio verack confirmando la recepción del mensaje de versión del nodo.
 
 
+## Verack
+
+El mensaje verack es un simple mensaje de encabezado sin carga útil.
+
+# Verack Message Structure:
+
+| Name        | Example Data | Format        | Size | Example Bytes                       |
+|-------------|--------------|---------------|------|-------------------------------------|
+| Magic Bytes |              | bytes         | 4    | F9 BE B4 D9                         |
+| Command     | "verack"     | ascii bytes   | 12   | 76 65 72 61 63 6B 00 00 00 00 00 00 |
+| Size        | 0            | little-endian | 4    | 00 00 00 00                         |
+| Checksum    |              | bytes         | 4    | 5D F6 E0 E2                         |
+
+
+
+
 
 
 
