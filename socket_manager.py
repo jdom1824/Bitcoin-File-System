@@ -92,7 +92,6 @@ class ConnectionManager:
                 try:
                     send_ping(self.sock)
                     print(f"Sent ping message to {self.ip} after error.")
-                    time.sleep(5)  # Esperar un momento para recibir respuesta
                     response = receive_message(self.sock)
                     if response:
                         self.process_message(response)
