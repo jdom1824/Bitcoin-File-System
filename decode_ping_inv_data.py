@@ -68,8 +68,6 @@ def decode_message_ping_inv(data):
                 inv_hash = bytes.fromhex(item['hash'])  ##Como estan en little-endian invierto
                 inv_hash = inv_hash[::-1].hex()
                 print(f"Block {inv_hash} received")
-                time.sleep(60)  # Espera un minuto
-                send_ping()  # Envía un ping
             elif item['type'] == 3:  # MSG_FILTERED_BLOCK
                 print(f"Filtered Block {item['hash']} received")
             elif item['type'] == 4:  # MSG_CMPCT_BLOCK
@@ -86,15 +84,6 @@ def send_pong(nonce):
     length = struct.pack('<I', len(payload))
     checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
     message = b'\xf9\xbe\xb4\xd9' + command + length + checksum + payload
+    print("send pong")
     send_message(message)
 
-
-def send_ping():
-    """Envía un mensaje ping con un nonce generado aleatoriamente."""
-    nonce = struct.unpack('<Q', struct.pack('<Q', int(time.time()*1000)))[0]  # Usa el timestamp como nonce
-    command = b'ping\x00\x00\x00\x00\x00\x00\x00'
-    payload = struct.pack('<Q', nonce)
-    length = struct.pack('<I', len(payload))
-    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
-    message = b'\xf9\xbe\xb4\xd9' + command + length + checksum + payload
-    send_message(message)
