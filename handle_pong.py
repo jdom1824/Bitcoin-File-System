@@ -3,7 +3,7 @@
 import struct
 import time
 import hashlib
-from socket_manager import send_message
+from utils import send_message
 
 def handle_pong(payload):
     """Maneja la respuesta pong y calcula la latencia."""
@@ -29,7 +29,7 @@ def handle_pong(payload):
         'latency': latency
     }
 
-def send_pong(nonce):
+def send_pong(sock, nonce):
     """Envía un mensaje pong con el mismo nonce recibido en el ping."""
     command = b'pong\x00\x00\x00\x00\x00\x00\x00'
     
@@ -49,6 +49,4 @@ def send_pong(nonce):
     print("send pong")
     
     # Envía el mensaje 
-    send_message(message)
-
-
+    send_message(sock, message)

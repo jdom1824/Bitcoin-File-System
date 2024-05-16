@@ -1,10 +1,7 @@
 # decode_ping_inv_data.py
 
 import struct
-from socket_manager import send_message
-from handle_pong import handle_pong
-from handle_pong import send_pong
-
+from handle_pong import handle_pong, send_pong
 
 def decode_varint(data):
     """ Decodifica un número VarInt de Bitcoin. """
@@ -22,7 +19,7 @@ def decode_inventory_item(data):
     inv_type, inv_hash = struct.unpack('<I32s', data)
     return {'type': inv_type, 'hash': inv_hash.hex()}
 
-def decode_message_ping_inv(data):
+def decode_message_ping_inv(sock, data):
     if len(data) < 24:
         return "Error: Incomplete message header."
     
@@ -34,11 +31,11 @@ def decode_message_ping_inv(data):
         if len(payload) < 8:
             return "Error: Incomplete payload for ping."
         nonce = struct.unpack('<Q', payload[:8])[0]
-        send_pong(nonce)  # Enviar pong automáticamente
+        send_pong(sock, nonce)  # Enviar pong automáticamente
         return {'type': 'ping', 'nonce': nonce}
     
     elif command == "pong":
-            return handle_pong(payload)
+        return handle_pong(payload)
     
     elif command == "inv":
         count, offset = decode_varint(payload)
@@ -55,7 +52,7 @@ def decode_message_ping_inv(data):
             if item['type'] == 1:  # MSG_TX
                 continue
             elif item['type'] == 2:  # MSG_BLOCK
-                inv_hash = bytes.fromhex(item['hash'])  ##Como estan en little-endian invierto
+                inv_hash = bytes.fromhex(item['hash'])  # Convertir de hex a bytes y revertir el endianness
                 inv_hash = inv_hash[::-1].hex()
                 print(f"Block {inv_hash} received")
             elif item['type'] == 3:  # MSG_FILTERED_BLOCK
@@ -66,5 +63,3 @@ def decode_message_ping_inv(data):
         return {'type': 'inv', 'items': items}
     
     return "Unhandled or ignored message type"
-
-
