@@ -2,18 +2,8 @@
 
 import struct
 from socket_manager import send_message
-import hashlib  # Asegúrate de que esta línea esté incluida
-import time
-
-def handle_pong(payload):
-    """ Maneja la respuesta pong y calcula la latencia."""
-    if len(payload) < 8:
-        return "Error: Incomplete payload for pong."
-    received_nonce = struct.unpack('<Q', payload[:8])[0]  # Extrae el nonce del pong, que es el timestamp del ping
-    current_time = int(time.time() * 1000)  # Obtén el timestamp actual en milisegundos
-    latency = (current_time - received_nonce) / 1000  # Calcula la latencia en segundos
-    print(f"Pong received, latency: {latency:.3f} seconds")
-    return {'type': 'pong', 'nonce': received_nonce, 'latency': latency}
+from handle_pong import handle_pong
+from handle_pong import send_pong
 
 
 def decode_varint(data):
@@ -77,13 +67,4 @@ def decode_message_ping_inv(data):
     
     return "Unhandled or ignored message type"
 
-def send_pong(nonce):
-    """Envía un mensaje pong con el mismo nonce recibido en el ping."""
-    command = b'pong\x00\x00\x00\x00\x00\x00\x00'
-    payload = struct.pack('<Q', nonce)
-    length = struct.pack('<I', len(payload))
-    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]
-    message = b'\xf9\xbe\xb4\xd9' + command + length + checksum + payload
-    print("send pong")
-    send_message(message)
 

@@ -10,11 +10,11 @@ from ping import send_ping
 
 def send_periodic_ping(sock):
     try:
-        time.sleep(300) # 5 mins to next ping
+        time.sleep(30) # 5 mins to next ping
         while True:
             send_ping(sock)
             print("Sent ping message.")
-            time.sleep(120)  # Esperar 60 segundos antes de enviar el próximo ping
+            time.sleep(30)  # Esperar 60 segundos antes de enviar el próximo ping
     except Exception as e:
         print("An error occurred in ping thread:", e)
 
