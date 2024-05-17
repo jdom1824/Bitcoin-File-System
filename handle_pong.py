@@ -29,12 +29,17 @@ def handle_pong(payload):
         'latency': latency
     }
 
-def send_pong(sock, nonce):
+def send_pong(sock, nonce_bytes):
     """Envía un mensaje pong con el mismo nonce recibido en el ping."""
-    command = b'pong\x00\x00\x00\x00\x00\x00\x00'
+    command = b'pong' + b'\x00' * 8
+    
+    # Verificar longitud del nonce
+    if len(nonce_bytes) != 8:
+        print("Error: Invalid nonce length")
+        return
     
     # Crea el payload con el nonce
-    payload = struct.pack('<Q', nonce)
+    payload = nonce_bytes
     
     # Calcula la longitud del payload
     length = struct.pack('<I', len(payload))
@@ -45,8 +50,8 @@ def send_pong(sock, nonce):
     # Construye el mensaje final
     message = b'\xf9\xbe\xb4\xd9' + command + length + checksum + payload
     
-    # Imprime un mensaje indicando que se ha enviado el pong
-    print("send pong")
+    # Imprime el contenido del mensaje para depuración
+    print(f"send pong: {message.hex()}")
     
     # Envía el mensaje 
     send_message(sock, message)

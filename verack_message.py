@@ -23,34 +23,3 @@ def create_verack_message():
     verack = magic + command + payload_size + checksum # sum all data
 
     return verack
-
-def decode_verack(data):
-    """Decodes a verack message and verifies its structure."""
-    if len(data) != 24:
-        return "Error: Incomplete verack message."
-
-    magic, command, payload_size, checksum = struct.unpack('<4s12sI4s', data[:24])
-    
-    # Verifying the magic bytes
-    if magic != b'\xf9\xbe\xb4\xd9':
-        return "Error: Incorrect magic bytes."
-
-    # Verifying the command
-    if command.strip(b'\x00') != b'verack':
-        return "Error: Incorrect command."
-
-    # Verifying the payload size
-    if payload_size != 0:
-        return "Error: Incorrect payload size for verack."
-
-    # Verifying the checksum
-    expected_checksum = hashlib.sha256(hashlib.sha256(b'').digest()).digest()[:4]
-    if checksum != expected_checksum:
-        return "Error: Incorrect checksum."
-
-    return {
-        'magic': magic.hex(),
-        'command': command.strip(b'\x00').decode(),
-        'payload_size': payload_size,
-        'checksum': checksum.hex()
-    }

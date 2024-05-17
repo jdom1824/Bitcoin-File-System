@@ -2,7 +2,7 @@
 import struct
 import time
 import hashlib
-from socket_manager import send_message
+from utils import send_message
 
 def create_ping_message():
     """Crea un mensaje ping con un nonce generado aleatoriamente."""
@@ -19,3 +19,11 @@ def send_ping(sock):
     """Envía un mensaje ping a través del socket proporcionado."""
     ping_message = create_ping_message()
     send_message(sock, ping_message)
+
+def decode_ping(message):
+    """Devuelve el nonce del mensaje ping sin decodificar."""
+    payload = message['message'][24:]  # Obtén el payload del mensaje
+    if len(payload) < 8:
+        return None, "Error: Incomplete ping message."
+    return payload[:8], None  # Devuelve el nonce sin decodificar
+

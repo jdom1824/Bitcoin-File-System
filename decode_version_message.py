@@ -15,22 +15,19 @@ def decode_version_message(data):
         return "Error: Data too short for the announced payload size."
     
     payload = data[header_size:header_size + size]
-
     if len(payload) < version_details_size:
         return "Error: Payload too short to include all fixed-size fields."
 
-    # Desempaquetar datos fijos hasta Nonce
     unpacked_data = struct.unpack(version_details_format, payload[:version_details_size])
-    user_agent_length_start = version_details_size
-    user_agent_length = struct.unpack_from('B', payload, user_agent_length_start)[0]
 
-    user_agent_start = user_agent_length_start + 1
+    user_agent_length = struct.unpack_from('B', payload, version_details_size)[0]
+    user_agent_start = version_details_size + 1
+
     if len(payload) < user_agent_start + user_agent_length:
         return "Error: Payload too short for the declared user agent length."
 
-    user_agent_format = f'{user_agent_length}s'
-    user_agent = struct.unpack_from(user_agent_format, payload, user_agent_start)[0].decode()
-    
+    user_agent = struct.unpack_from(f'{user_agent_length}s', payload, user_agent_start)[0].decode()
+
     last_block_start = user_agent_start + user_agent_length
     if len(payload) < last_block_start + 4:
         return "Error: Payload too short to include last block."

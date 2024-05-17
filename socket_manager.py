@@ -1,11 +1,10 @@
-import time
 import threading
 from utils import create_socket, send_message, receive_message, close_socket
 from version_message import create_version_message
-from verack_message import create_verack_message
-from decode_version_message import decode_version_message
-from ping import send_ping
 from split_message import process_message
+from decode_version_message import decode_version_message
+from decode_verack import decode_verack
+from verack_message import create_verack_message
 
 class ConnectionManager:
     def __init__(self, ip, port):
@@ -13,7 +12,6 @@ class ConnectionManager:
         self.port = port
         self.sock = None
         self.lock = threading.Lock()
-        self.thread = None
 
     def connect_to_node(self):
         try:
@@ -27,98 +25,30 @@ class ConnectionManager:
             send_message(sock, version_msg)
             print(f"Sent version message to {self.ip}")
 
-            response = receive_message(sock)
+            # Recibir y procesar mensaje de versión
+            response = receive_message(self.sock)
             if response:
-                response_message = decode_version_message(response)
-                print(response_message)
-
-                verack_msg = create_verack_message()
-                send_message(sock, verack_msg)
-                print(f"Sent verack message to {self.ip}")
-
-                response = receive_message(sock)
-                if response:
-                    results = process_message(sock, response)
-                    for result in results:
-                        print(result)
-
-                # Iniciar hilo para enviar pings periódicos
-                #self.thread = threading.Thread(target=self.send_periodic_ping)
-                #self.thread.daemon = True
-                #self.thread.start()
-                #return sock
-            else:
-                print(f"No version response from {self.ip}. Closing socket.")
-                self.reconnect()
-                return None
+                messages = process_message(response)
+                version_received = False
+                verack_received = False
+                for message in messages:
+                    print(f"Received message type: {message['type']}")
+                    if message['type'] == 'version':
+                        print(decode_version_message(message['message']))
+                        version_received = True
+                    if message['type'] == 'verack':
+                        print(decode_verack(message['message']))
+                        msg_verack = create_verack_message()
+                        send_message(sock, msg_verack)
+                        print("msg_verack_send")
+                        verack_received = True
+                if version_received and verack_received:
+                    return self.sock
+            return False
         except Exception as e:
             print(f"Failed to connect to {self.ip}: {e}")
-            return None
-
-    def send_periodic_ping(self):
-        try:
-            time.sleep(30)  # Esperar 30 segundos antes de enviar el primer ping
-            while True:
-                try:
-                    send_ping(self.sock)
-                    print(f"Sent ping message to {self.ip}.")
-                    time.sleep(30)  # Esperar 30 segundos antes de enviar el próximo ping
-                except Exception as e:
-                    print(f"Error sending ping to {self.ip}: {e}")
-                    break  # No intentar reconectar, simplemente salir del bucle
-        except Exception as e:
-            print(f"An error occurred in ping thread for {self.ip}: {e}")
-
-    def manage_connection(self):
-        self.connect_to_node()
-
-        while True:
-            try:
-                response = receive_message(self.sock)
-                if not response:
-                    print("No more data received. Connection may be closed.")
-                    # Intentar enviar un ping antes de reconectar
-                    try:
-                        send_ping(self.sock)
-                        print(f"Sent ping message to {self.ip} after no data received.")
-                        time.sleep(5)  # Esperar un momento para recibir respuesta
-                        response = receive_message(self.sock)
-                        if response:
-                            results = process_message(self.sock, response)
-                            for result in results:
-                                print(result)
-                            continue  # Si se recibe respuesta, continuar
-                    except Exception as ping_error:
-                        print(f"Ping failed after no data received: {ping_error}")
-                    self.reconnect()
-                else:
-                    results = process_message(self.sock, response)
-                    for result in results:
-                        print(result)
-            except Exception as e:
-                print(f"Error with connection to {self.ip}: {e}")
-                # Intentar enviar un ping antes de reconectar
-                try:
-                    send_ping(self.sock)
-                    print(f"Sent ping message to {self.ip} after error.")
-                    time.sleep(5)  # Esperar un momento para recibir respuesta
-                    response = receive_message(self.sock)
-                    if response:
-                        results = process_message(self.sock, response)
-                        for result in results:
-                            print(result)
-                        continue  # Si se recibe respuesta, continuar
-                except Exception as ping_error:
-                    print(f"Ping failed after error: {ping_error}")
-                self.reconnect()
-            time.sleep(5)
-
-    def reconnect(self):
-        self.lock.acquire()
-        if self.sock:
-            close_socket(self.sock)
-            self.sock = None
-        self.lock.release()
-
-        print(f"Reconnecting to {self.ip}")
-        self.connect_to_node()
+            return False
+        finally:
+            if not (version_received and verack_received):
+                close_socket(self.sock)
+                print(f"Socket to {self.ip} closed.")
