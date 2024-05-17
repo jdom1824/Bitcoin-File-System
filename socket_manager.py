@@ -1,12 +1,11 @@
-# socket_manager.py
 import time
 import threading
 from utils import create_socket, send_message, receive_message, close_socket
 from version_message import create_version_message
 from verack_message import create_verack_message
 from decode_version_message import decode_version_message
-from decode_ping_inv_data import decode_message_ping_inv
 from ping import send_ping
+from split_message import process_message
 
 class ConnectionManager:
     def __init__(self, ip, port):
@@ -37,11 +36,17 @@ class ConnectionManager:
                 send_message(sock, verack_msg)
                 print(f"Sent verack message to {self.ip}")
 
+                response = receive_message(sock)
+                if response:
+                    results = process_message(sock, response)
+                    for result in results:
+                        print(result)
+
                 # Iniciar hilo para enviar pings periódicos
-                self.thread = threading.Thread(target=self.send_periodic_ping)
-                self.thread.daemon = True
-                self.thread.start()
-                return sock
+                #self.thread = threading.Thread(target=self.send_periodic_ping)
+                #self.thread.daemon = True
+                #self.thread.start()
+                #return sock
             else:
                 print(f"No version response from {self.ip}. Closing socket.")
                 self.reconnect()
@@ -52,16 +57,15 @@ class ConnectionManager:
 
     def send_periodic_ping(self):
         try:
-            time.sleep(120)  # Esperar 120 segundos antes de enviar el primer ping
+            time.sleep(30)  # Esperar 30 segundos antes de enviar el primer ping
             while True:
                 try:
                     send_ping(self.sock)
                     print(f"Sent ping message to {self.ip}.")
-                    time.sleep(120)  # Esperar 120 segundos antes de enviar el próximo ping
+                    time.sleep(30)  # Esperar 30 segundos antes de enviar el próximo ping
                 except Exception as e:
                     print(f"Error sending ping to {self.ip}: {e}")
-                    self.reconnect()
-                    break
+                    break  # No intentar reconectar, simplemente salir del bucle
         except Exception as e:
             print(f"An error occurred in ping thread for {self.ip}: {e}")
 
@@ -77,36 +81,37 @@ class ConnectionManager:
                     try:
                         send_ping(self.sock)
                         print(f"Sent ping message to {self.ip} after no data received.")
+                        time.sleep(5)  # Esperar un momento para recibir respuesta
                         response = receive_message(self.sock)
                         if response:
-                            self.process_message(response)
+                            results = process_message(self.sock, response)
+                            for result in results:
+                                print(result)
                             continue  # Si se recibe respuesta, continuar
                     except Exception as ping_error:
                         print(f"Ping failed after no data received: {ping_error}")
                     self.reconnect()
                 else:
-                    self.process_message(response)
+                    results = process_message(self.sock, response)
+                    for result in results:
+                        print(result)
             except Exception as e:
                 print(f"Error with connection to {self.ip}: {e}")
                 # Intentar enviar un ping antes de reconectar
                 try:
                     send_ping(self.sock)
                     print(f"Sent ping message to {self.ip} after error.")
+                    time.sleep(5)  # Esperar un momento para recibir respuesta
                     response = receive_message(self.sock)
                     if response:
-                        self.process_message(response)
+                        results = process_message(self.sock, response)
+                        for result in results:
+                            print(result)
                         continue  # Si se recibe respuesta, continuar
                 except Exception as ping_error:
                     print(f"Ping failed after error: {ping_error}")
                 self.reconnect()
             time.sleep(5)
-
-    def process_message(self, message):
-        # Procesar el mensaje recibido
-        # Decodificar y manejar diferentes tipos de mensajes aquí
-        #print(f"Received message: {message}")
-        decode_message_ping_inv(self.sock, message)
-        # Añadir más lógica de procesamiento según sea necesario
 
     def reconnect(self):
         self.lock.acquire()
