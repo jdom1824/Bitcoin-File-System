@@ -1,7 +1,12 @@
+# split_message.py
 import struct
 
+incomplete_message = b''
+
 def process_message(message):
+    global incomplete_message
     results = []
+    message = incomplete_message + message
     try:
         while len(message) >= 24:
             magic = message[:4]
@@ -15,7 +20,7 @@ def process_message(message):
             
             # Verificar si tenemos el mensaje completo
             if len(message) < total_length:
-                print("Error: Incomplete message.")
+                incomplete_message = message  # Guardar el mensaje incompleto
                 return results
             
             # Extraer y procesar el mensaje completo
@@ -28,6 +33,7 @@ def process_message(message):
             result = {"type": command, "message": single_message}
             results.append(result)
    
+        incomplete_message = b''  # Clear incomplete message buffer after processing all complete messages
     except Exception as e:
         print(f"Error processing message: {e}")
     return results

@@ -37,7 +37,12 @@ def decode_inv(data):
         current += 36
     
     for item in items:
-        if item['type'] == 2:  # MSG_BLOCK
+        if item['type'] == 1:  # MSG_TX
+            inv_hash = bytes.fromhex(item['hash'])  # Convertir de hex a bytes y revertir el endianness
+            inv_hash = inv_hash[::-1].hex()
+            print(f"Transaction {inv_hash} received")
+            return {'type': 'inv', 'items': [item]}, None
+        elif item['type'] == 2:  # MSG_BLOCK
             inv_hash = bytes.fromhex(item['hash'])  # Convertir de hex a bytes y revertir el endianness
             inv_hash = inv_hash[::-1].hex()
             print(f"Block {inv_hash} received")
@@ -48,7 +53,23 @@ def decode_inv(data):
         elif item['type'] == 4:  # MSG_CMPCT_BLOCK
             print(f"Compact Block {item['hash']} received")
             return {'type': 'inv', 'items': [item]}, None
-    
+        elif item['type'] == 5:  # MSG_WITNESS_TX
+            inv_hash = bytes.fromhex(item['hash'])  # Convertir de hex a bytes y revertir el endianness
+            inv_hash = inv_hash[::-1].hex()
+            print(f"Witness Transaction {inv_hash} received")
+            return {'type': 'inv', 'items': [item]}, None
+        elif item['type'] == 6:  # MSG_WITNESS_BLOCK
+            inv_hash = bytes.fromhex(item['hash'])  # Convertir de hex a bytes y revertir el endianness
+            inv_hash = inv_hash[::-1].hex()
+            print(f"Witness Block {inv_hash} received")
+            return {'type': 'inv', 'items': [item]}, None
+        elif item['type'] == 7:  # MSG_FILTERED_WITNESS_BLOCK
+            print(f"Filtered Witness Block {item['hash']} received")
+            return {'type': 'inv', 'items': [item]}, None
+        else:
+            print(f"Unknown type {item['type']} received")
+            return {'type': 'inv', 'items': [item]}, None
+
     return None, None
     
     

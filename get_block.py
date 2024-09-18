@@ -1,25 +1,18 @@
-# verack_message
+#get_block.py
+
 '''
-Verack Message:
 ┌─────────────┬──────────────┬───────────────┬───────┬─────────────────────────────────────┐
 │ Name        │ Example Data │ Format        │ Size  │ Example Bytes                       │
 ├─────────────┼──────────────┼───────────────┼───────┼─────────────────────────────────────┤
 │ Magic Bytes │              │ bytes         │     4 │ F9 BE B4 D9                         │
-│ Command     │ "verack"     │ ascii bytes   │    12 │ 76 65 72 61 63 6B 00 00 00 00 00 00 │
-│ Size        │ 0            │ little-endian │     0 │ 00 00 00 00                         │
-│ Checksum    │              │ bytes         │     4 │ 5D F6 E0 E2                         │
+│ Command     │ "getdata"    │ ascii bytes   │    12 │ 67 65 74 64 61 74 61 00 00 00 00 00 │
+│ Payload Size│ 37           │ little-endian │     4 │ 25 00 00 00                         │
+│ Checksum    │              │ bytes         │     4 │ 72 7D 5D 7F                         │
+│ Payload     │              │               │       │                                     │
+│   Count     │ 1            │ var_int       │     1 │ 01                                  │
+│   Type      │ 2 (MSG_BLOCK)│ little-endian │     4 │ 02 00 00 00                         │
+│   Block Hash│              │ little-endian │    32 │ 6F E2 8C 0A B6 F1 B3 72 C1 A6 A2 46 │
+│             │              │               │       │ AE 63 F7 4F 31 E1 92 A1 00 00 00 00 │
+│             │              │               │       │ 00 00 00 00 00 00 00 00             │
 └─────────────┴──────────────┴───────────────┴───────┴─────────────────────────────────────┘
 '''
-
-import hashlib
-import struct
-
-def create_verack_message():
-    magic = b'\xf9\xbe\xb4\xd9'  # Magic number for mainnet
-    command = b'verack' + b'\x00' * (12 - len(b'verack'))  # Command 'verack' + padding
-    payload_size = struct.pack('<I', 0)  # No payload, size is 0
-    payload = b''  # Empty payload for 'verack'
-    checksum = hashlib.sha256(hashlib.sha256(payload).digest()).digest()[:4]  # Checksum of the empty payload
-    verack = magic + command + payload_size + checksum # sum all data
-    return verack
-

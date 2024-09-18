@@ -2,11 +2,9 @@ import threading
 import time
 from socket_manager import ConnectionManager
 from listener import listen_for_messages
-from ping import create_ping_message, send_ping
-from utils import receive_message
 
 def main():
-    node_ip = '188.174.58.144'  # Cambia esto por la IP real del nodo
+    node_ip = '190.145.127.254'  # Cambia esto por la IP real del nodo
     node_port = 8333  # Puerto estándar de Bitcoin
 
     while True:

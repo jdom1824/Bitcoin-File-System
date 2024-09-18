@@ -7,6 +7,7 @@ from decode_verack import decode_verack
 from verack_message import create_verack_message
 
 class ConnectionManager:
+    
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
